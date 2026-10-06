@@ -34,7 +34,7 @@ Act:
 | `desk key cmd+l` · `desk scroll down 5` · `desk open "App"` · `desk wait 0.5` | |
 | `desk expect "Add project" Safari` | Stops unless a label containing the text shows up within 3s (`--timeout S`). ~40 tokens. |
 | `desk until "log out\|logout" Safari --timeout 900` | Wait (checking every 2s) until a label or the window title contains any of the texts; `--gone` waits for it to disappear. For handing off to the user. |
-| `desk run "click #4; expect 'First name'; type Ada; key tab; type Lovelace; ui --find Submit Safari"` | Several steps in one call. Every click waits up to 1.5s for the clicked window to change; if it doesn't, the batch stops and names the step. |
+| `desk run "click #4; expect 'First name'; type Ada; key tab; type Lovelace; ui --find Submit Safari"` | Several steps in one call. Every click waits up to 1.5s for the clicked window to change; if it doesn't, the batch stops and names the step. If the user moves the mouse, the batch finishes the current step and stops; hand control back, don't retry. |
 
 ## Loop
 
