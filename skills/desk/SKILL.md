@@ -28,6 +28,7 @@ Act:
 |---|---|
 | `desk click #N` | Click element N from the last `ui`. Brings its app to the front first, since the terminal often covers it. |
 | `desk click X Y [right\|double]` | Click at (X, Y) in the last screenshot's pixels. |
+| `desk move X Y` / `desk move #N` | Put the cursor there without clicking. Do this before `scroll`: macOS scrolls whatever is under the cursor, which is often the terminal. |
 | `desk drag X1 Y1 X2 Y2` | Press, move slowly, release (screenshot pixels, or `#N` for either end). |
 | `desk type "text"` | Pastes the text (your clipboard is restored after). Exact, including `:` and capitals. |
 | `desk type --keys "text"` | Real keystrokes, for native menus and pickers that ignore paste (e.g. choosing "September" in a select). |
