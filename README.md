@@ -17,17 +17,51 @@ the plugins I lean on. My notes stay private; the parts anyone can reuse are her
 The notes and the hook live in [Brain](https://github.com/zacfink/brain), a plain-markdown "digital brain" with a
 local app and a phone app on top.
 
+## How the pieces connect
+
+```mermaid
+flowchart LR
+  subgraph start[Session start]
+    hook[session_start.py hook]
+  end
+  subgraph notes["~/Notes (private repo)"]
+    index[INDEX.md + projects/]
+    now[now.md: Today plan]
+    habits[claude/habits.md]
+    preds[claude/predictions.md]
+    inbox[inbox.md]
+    sessions[sessions/]
+  end
+  subgraph claude[Claude Code]
+    skills[Skills: cus, desk, wild, plugins]
+    conn[Connectors: Gmail, Calendar, Drive, Notion]
+  end
+  phone[Brain phone app] -- captures --> inbox
+  imsg[iMessage thread] -- messages --> claude
+  habits -- read by --> hook
+  preds -- score --> hook
+  hook -- habits, score, inbox --> claude
+  hook -- no Today plan? --> morning[Morning update]
+  morning --> conn
+  morning --> now
+  claude -- reads first --> index
+  claude -- /cus --> sessions
+  claude -- /cus --> index
+  claude -- logs bets --> preds
+  claude -- desk --> mac[The Mac's screen, mouse, keyboard]
+  claude -- reminders --> cal[Google Calendar popups on my phone]
+  notes -- git push --> phone
+```
+
+- **What starts things:** the session-start hook (every session), me (in the terminal or over iMessage), and the
+  Brain phone app (captures, and optionally background agents).
+- **What holds state:** only `~/Notes`. Claude Code sessions are disposable, and the notes are not.
+- **How I'm reached away from my desk:** Google Calendar popups, never terminal notifications.
+
 ## Habits and calibration
 
 Claude follows a list of habits I switch on and off in Brain. Each one exists because something went wrong
-without it. Some I run:
-
-- Lead with the answer, keep it short.
-- Verify it actually happened before treating it as done.
-- Argue against a project idea before building it.
-- Pitch one practical thing, then move far.
-- Reach me through Google Calendar, not the terminal (I leave my laptop at home).
-- Let me pick more than one answer when it asks a question.
+without it. All of them, with the reason behind each: [HABITS.md](HABITS.md).
 
 Claude also logs predictions about what I mean, with a confidence, and scores them once I answer. Every session
 starts with that score and what the misses say. Mine currently says its guesses about what I mean are often
@@ -42,7 +76,7 @@ wrong, so it asks before acting on one, and it claims more confidence than it ea
 | [`wild`](skills/wild/SKILL.md) | The opt-in exception to "argue first": 40+ ideas across set lenses, then mutations, then a landing. |
 | [`brain-polish`](skills/brain-polish/SKILL.md) | Finds UI in Brain that drifted from its own design rules and fixes it on a branch. Never redesigns. |
 
-To use one, copy its folder into `~/.claude/skills/`. They assume a notes folder at `~/Notes` laid out like Brain's.
+To set any of this up yourself, follow [SETUP.md](SETUP.md).
 
 ## Plugins and skills I use
 
