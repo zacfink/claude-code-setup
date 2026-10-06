@@ -29,15 +29,19 @@ Act:
 | `desk click #N` | Click element N from the last `ui`. Brings its app to the front first, since the terminal often covers it. |
 | `desk click X Y [right\|double]` | Click at (X, Y) in the last screenshot's pixels. |
 | `desk drag X1 Y1 X2 Y2` | Press, move slowly, release (screenshot pixels, or `#N` for either end). |
-| `desk type "text"` · `desk key cmd+l` · `desk scroll down 5` · `desk open "App"` · `desk wait 0.5` | |
+| `desk type "text"` | Pastes the text (your clipboard is restored after). Exact, including `:` and capitals. |
+| `desk type --keys "text"` | Real keystrokes, for native menus and pickers that ignore paste (e.g. choosing "September" in a select). |
+| `desk key cmd+l` · `desk scroll down 5` · `desk open "App"` · `desk wait 0.5` | |
+| `desk expect "Add project" Safari` | Stops unless a label containing the text shows up within 3s (`--timeout S`). ~40 tokens. |
 | `desk until "log out\|logout" Safari --timeout 900` | Wait (checking every 2s) until a label or the window title contains any of the texts; `--gone` waits for it to disappear. For handing off to the user. |
-| `desk run "click #4; type Ada; key tab; type Lovelace; ui --find Submit Safari"` | Several steps in one call, ending with a cheap look. |
+| `desk run "click #4; expect 'First name'; type Ada; key tab; type Lovelace; ui --find Submit Safari"` | Several steps in one call. Every click waits up to 1.5s for the clicked window to change; if it doesn't, the batch stops and names the step. |
 
 ## Loop
 
 1. Look with `ui --find` or `ui` first; `shot` only when text isn't enough.
-2. Act. Batch the dull runs (tabbing through form fields, typing known values) with `run`, and end the batch with a look.
-   Take risky or uncertain clicks one at a time.
+2. Act in batches. Clicks are change-checked, so batch whole sequences with `run`: put an `expect` after each step
+   that should open or reveal something (a form, a menu, a new page), and end with one cheap look. Screenshot only
+   when a batch stops or the final look is ambiguous. Still take risky clicks (submit, send, delete) one at a time.
 3. Check the result before going on. If it didn't do what you expected, look again (a screenshot if the text is ambiguous); don't click harder.
 
 Element numbers only stay valid until the page changes; after any click that navigates or opens something, run `ui` again.
